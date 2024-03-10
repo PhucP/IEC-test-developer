@@ -9,9 +9,10 @@ public class Item
 {
     public Cell Cell { get; private set; }
 
-    public Transform View { get; private set; }
+    public Transform View { get; set; }
 
-
+    public SpriteRenderer _sp;
+    
     public virtual void SetView()
     {
         string prefabname = GetPrefabName();
@@ -22,6 +23,7 @@ public class Item
             if (prefab)
             {
                 View = GameObject.Instantiate(prefab).transform;
+                _sp = View.GetComponent<SpriteRenderer>();
             }
         }
     }
@@ -60,10 +62,10 @@ public class Item
     {
         if (View == null) return;
 
-        SpriteRenderer sp = View.GetComponent<SpriteRenderer>();
-        if (sp)
+        //SpriteRenderer sp = View.GetComponent<SpriteRenderer>();
+        if (_sp)
         {
-            sp.sortingOrder = 1;
+            _sp.sortingOrder = 1;
         }
     }
 
@@ -72,10 +74,10 @@ public class Item
     {
         if (View == null) return;
 
-        SpriteRenderer sp = View.GetComponent<SpriteRenderer>();
-        if (sp)
+        //SpriteRenderer sp = View.GetComponent<SpriteRenderer>();
+        if (_sp)
         {
-            sp.sortingOrder = 0;
+            _sp.sortingOrder = 0;
         }
 
     }
@@ -101,7 +103,7 @@ public class Item
             View.DOScale(0.1f, 0.1f).OnComplete(
                 () =>
                 {
-                    GameObject.Destroy(View.gameObject);
+                    View.gameObject.SetActive(false);
                     View = null;
                 }
                 );

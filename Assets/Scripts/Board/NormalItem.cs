@@ -22,6 +22,21 @@ public class NormalItem : Item
         ItemType = type;
     }
 
+    public override void SetView()
+    {
+        string prefabname = GetPrefabName();
+
+        if (!string.IsNullOrEmpty(prefabname))
+        {
+            GameObject prefab = Resources.Load<GameObject>(prefabname);
+            if (prefab)
+            {
+                View = Pool.Instance.GetItemFromPool(ItemType);
+                _sp = View.GetComponent<SpriteRenderer>();
+            }
+        }
+    }
+
     protected override string GetPrefabName()
     {
         string prefabname = string.Empty;
