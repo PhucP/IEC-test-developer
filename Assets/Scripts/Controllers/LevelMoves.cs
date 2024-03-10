@@ -10,17 +10,26 @@ public class LevelMoves : LevelCondition
 
     private BoardController m_board;
 
+    private int _previousMove;
+
     public override void Setup(float value, Text txt, BoardController board)
     {
         base.Setup(value, txt);
 
         m_moves = (int)value;
+        _previousMove = (int)value;
 
         m_board = board;
 
         m_board.OnMoveEvent += OnMove;
+        Pool.Instance.OnRestartLevel += OnReset;
 
         UpdateText();
+    }
+
+    private void OnReset()
+    {
+        m_moves = _previousMove;
     }
 
     private void OnMove()
@@ -44,7 +53,11 @@ public class LevelMoves : LevelCondition
 
     protected override void OnDestroy()
     {
-        if (m_board != null) m_board.OnMoveEvent -= OnMove;
+        if (m_board != null)
+        {
+            m_board.OnMoveEvent -= OnMove;
+            Pool.Instance.OnRestartLevel += OnReset;
+        }
 
         base.OnDestroy();
     }

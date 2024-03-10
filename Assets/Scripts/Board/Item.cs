@@ -52,10 +52,10 @@ public class Item
 
     public void SetViewRoot(Transform root)
     {
-        if (View)
-        {
-            View.SetParent(root);
-        }
+        // if (View)
+        // {
+        //     View.SetParent(root);
+        // }
     }
 
     public void SetSortingLayerHigher()
@@ -134,8 +134,7 @@ public class Item
 
         if (View)
         {
-            GameObject.Destroy(View.gameObject);
-            View = null;
+            View.gameObject.SetActive(false);
         }
     }
 }

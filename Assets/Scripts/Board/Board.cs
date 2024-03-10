@@ -15,6 +15,8 @@ public class Board
         ALL
     }
 
+    private readonly NormalItem.eNormalType[] _listOriginType;
+
     private int boardSizeX;
 
     private int boardSizeY;
@@ -24,9 +26,11 @@ public class Board
     private Transform m_root;
 
     private int m_matchMin;
-
+    
     public Board(Transform transform, GameSettings gameSettings)
     {
+        Pool.Instance.OnRestartLevel += ResetItem;
+        
         m_root = transform;
 
         m_matchMin = gameSettings.MatchesMin;
@@ -35,6 +39,8 @@ public class Board
         this.boardSizeY = gameSettings.BoardSizeY;
 
         m_cells = new Cell[boardSizeX, boardSizeY];
+        
+        _listOriginType = new NormalItem.eNormalType[boardSizeX * boardSizeY];
 
         CreateBoard();
     }
@@ -72,6 +78,22 @@ public class Board
 
     }
     
+    public void ResetItem()
+    {
+        for (int x = 0; x < boardSizeX; x++)
+        {
+            for (int y = 0; y < boardSizeY; y++)
+            {
+                var originItem = _listOriginType[x * boardSizeY + y];
+               
+                Cell cell = m_cells[x, y];
+                var tempItem = cell.Item as NormalItem;
+    
+                tempItem.ItemType = originItem;
+                tempItem.SetSkin();
+            }
+        }
+    }
 
     internal void Fill()
     {
@@ -105,6 +127,8 @@ public class Board
                 item.SetView();
                 item.SetViewRoot(m_root);
                 item.SetSkin();
+                
+                _listOriginType[x * boardSizeY + y] = item.ItemType;
 
                 cell.Assign(item);
                 cell.ApplyItemPosition(false);

@@ -8,6 +8,12 @@ using Object = UnityEngine.Object;
 public class Pool : MonoBehaviour
 {
     public static Pool Instance;
+    
+    #region Observer
+
+    public Action OnRestartLevel;
+
+    #endregion
 
     [Header("Skin Config")] 
     public SkinConfig skinConfig;
