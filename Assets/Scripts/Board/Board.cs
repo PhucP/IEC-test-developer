@@ -3,6 +3,7 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class Board
@@ -161,29 +162,91 @@ public class Board
         }
     }
 
-
+    private Dictionary<NormalItem.eNormalType, int> _currentTypeDictionary = new Dictionary<NormalItem.eNormalType, int>();
     internal void FillGapsWithNewItems()
     {
+        _listTypeExcept.Clear();
+        _currentTypeDictionary.Clear();
         for (int x = 0; x < boardSizeX; x++)
         {
             for (int y = 0; y < boardSizeY; y++)
             {
                 Cell cell = m_cells[x, y];
+                var itemm = cell.Item as NormalItem;
+
+                if (itemm != null)
+                {
+                    if (_currentTypeDictionary.ContainsKey(itemm.ItemType)) _currentTypeDictionary[itemm.ItemType]++;
+                    else _currentTypeDictionary.Add(itemm.ItemType, 0);
+                }
+              
+                
                 if (!cell.IsEmpty) continue;
-
+                
                 NormalItem item = new NormalItem();
-
-                item.SetType(Utils.GetRandomNormalType());
+                item.SetType(GetTypeItem(cell));
                 item.SetView();
                 item.SetViewRoot(m_root);
                 item.SetSkin();
-
+                
                 cell.Assign(item);
                 cell.ApplyItemPosition(true);
             }
         }
     }
 
+    private HashSet<NormalItem.eNormalType> _listTypeExcept = new HashSet<NormalItem.eNormalType>();
+ 
+    private NormalItem.eNormalType GetTypeItem(Cell cell)
+    {
+        if (cell.NeighbourLeft != null && !cell.NeighbourLeft.IsEmpty)
+        {
+            var left = (NormalItem)cell.NeighbourLeft.Item;
+            if (left != null)
+            {
+                _listTypeExcept.Add(left.ItemType);
+            }
+        }
+        if (cell.NeighbourRight != null && !cell.NeighbourRight.IsEmpty)
+        {
+            var right = (NormalItem)cell.NeighbourRight.Item;
+            if (right != null)
+            {
+                _listTypeExcept.Add(right.ItemType);
+            }
+        }
+        if (cell.NeighbourUp != null && !cell.NeighbourUp.IsEmpty)
+        {
+            var up = (NormalItem)cell.NeighbourUp.Item;
+            if (up != null)
+            {
+                _listTypeExcept.Add(up.ItemType);
+            }
+        }
+        if (cell.NeighbourBottom != null && !cell.NeighbourBottom.IsEmpty)
+        {
+            var bottom = (NormalItem)cell.NeighbourBottom.Item;
+            if (bottom != null)
+            {
+                _listTypeExcept.Add(bottom.ItemType);
+            }
+        }
+
+        int maxx = int.MaxValue;
+        var tempType = NormalItem.eNormalType.TYPE_THREE;
+        
+        foreach (var types in _currentTypeDictionary)
+        {
+            if (types.Value < maxx)
+            {
+                maxx = types.Value;
+                tempType = types.Key;
+            }
+        }
+        var newType = Utils.GetRandomNormalTypeExcept(_listTypeExcept.ToArray());
+        if (_listTypeExcept.Contains(tempType) && newType != null) return newType;
+        return tempType;
+    }
     internal void ExplodeAllItems()
     {
         for (int x = 0; x < boardSizeX; x++)

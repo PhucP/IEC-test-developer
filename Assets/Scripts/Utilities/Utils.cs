@@ -20,7 +20,8 @@ public class Utils
         List<NormalItem.eNormalType> list = Enum.GetValues(typeof(NormalItem.eNormalType)).Cast<NormalItem.eNormalType>().Except(types).ToList();
 
         int rnd = URandom.Range(0, list.Count);
-        NormalItem.eNormalType result = list[rnd];
+        if (rnd > list.Count - 1) return NormalItem.eNormalType.TYPE_THREE;
+        NormalItem.eNormalType result = list[Math.Min(rnd, list.Count -1)];
 
         return result;
     }
