@@ -8,6 +8,9 @@ using Object = UnityEngine.Object;
 public class Pool : MonoBehaviour
 {
     public static Pool Instance;
+
+    [Header("Skin Config")] 
+    public SkinConfig skinConfig;
     
     [SerializeField] private List<ItemObject> listItemObjects;
     [SerializeField] private int numOfItem;

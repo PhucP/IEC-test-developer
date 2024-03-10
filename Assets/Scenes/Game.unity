@@ -2468,6 +2468,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 84332a959e9c12645bce71840df805ce, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  skinConfig: {fileID: 11400000, guid: aa9eade802955094b9f696c1105bd41e, type: 2}
   listItemObjects:
   - type: 0
     prefab: {fileID: 1645311756642076403, guid: 42636182d7ad561418687da1a9301f13,

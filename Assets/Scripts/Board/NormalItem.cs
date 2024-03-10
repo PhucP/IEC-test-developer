@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class NormalItem : Item
@@ -73,5 +74,13 @@ public class NormalItem : Item
         NormalItem it = other as NormalItem;
 
         return it != null && it.ItemType == this.ItemType;
+    }
+    
+    public void SetSkin()
+    {
+        var skinConfig = Pool.Instance.skinConfig.listSkin[0];
+        var image = skinConfig.listSprites.FirstOrDefault(skin => skin.type == ItemType)?.sprite;
+        if(!image) return;
+        View.GetComponent<SpriteRenderer>().sprite = image;
     }
 }

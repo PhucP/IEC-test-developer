@@ -71,6 +71,7 @@ public class Board
         }
 
     }
+    
 
     internal void Fill()
     {
@@ -103,6 +104,7 @@ public class Board
                 item.SetType(Utils.GetRandomNormalTypeExcept(types.ToArray()));
                 item.SetView();
                 item.SetViewRoot(m_root);
+                item.SetSkin();
 
                 cell.Assign(item);
                 cell.ApplyItemPosition(false);
@@ -150,6 +152,7 @@ public class Board
                 item.SetType(Utils.GetRandomNormalType());
                 item.SetView();
                 item.SetViewRoot(m_root);
+                item.SetSkin();
 
                 cell.Assign(item);
                 cell.ApplyItemPosition(true);
